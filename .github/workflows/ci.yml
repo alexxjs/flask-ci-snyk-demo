@@ -1,43 +1,31 @@
-name: Flask CI with Snyk
+name: Flask CI with Snyk Code Scan
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   build-and-scan:
     runs-on: ubuntu-latest
 
     steps:
-    - name: ⬇️ Checkout Repository
+    - name: ⬇️ Checkout code
       uses: actions/checkout@v3
 
-    - name: 🐍 Set up Python 3.11
+    - name: 🐍 Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.11
+        python-version: "3.11"
 
-    - name: 🔄 Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt --skip-unresolved
+    - name: 📦 Install pip dependencies (minimal to run snyk CLI only)
+      run: pip install --upgrade pip
 
-    # Optional: Add your test step here
-    - name: 🧪 Run Tests (optional)
-      run: |
-        echo "No tests defined yet"
-        # python -m unittest discover
-
-    - name: 🔍 Snyk Dependency Scan
+    - name: 🛡️ Run Snyk Code Scan (SAST only)
       uses: snyk/actions/python@master
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
-        args: test --file=requirements.txt --package-manager=pip --skip-unresolved
-
-    - name: 🧠 Snyk Code Scan
-      run: snyk code test
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        command: code test  # SAST scan
+        args: "--all-projects"
