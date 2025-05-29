@@ -26,7 +26,7 @@ from io import BytesIO
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///diskjock.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'IhpqnkRLGOiDQI69L45uegn_M8ZAG9SrhNT27jpbHuY='
+
 
 
 # Initialize the database once
