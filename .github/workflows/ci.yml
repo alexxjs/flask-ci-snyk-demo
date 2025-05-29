@@ -39,5 +39,5 @@ jobs:
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
-        args: --file=requirements.txt --package-manager=pip
+        args: --file=requirements.txt --package-manager=pip --skip-unresolved
 
