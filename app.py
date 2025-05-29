@@ -27,8 +27,6 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///diskjock.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'IhpqnkRLGOiDQI69L45uegn_M8ZAG9SrhNT27jpbHuY='
-#app.config['STRIPE_PUBLIC_KEY'] = 'pk_test_51Qgn3WGLdU05YBbTg5CJTzM7XhF2VSslPITyEFrckQSPaUEyzv26pz3DXYpitZqS8uTEQNiWhpK07v1ZD0Acp3Bn00lhnznScu'
-#app.config['STRIPE_SECRET_KEY'] = 'sk_test_51Qgn3WGLdU05YBbTzzDL0gpnzGDTJquzs8OUg03K7xr4qsBnWr6tzwRVIXf2IQs3CSiMzZatCIkpt1HqAONdwiNc00CRcM3eFN'
 
 stripe.api_key = app.config['STRIPE_SECRET_KEY']
 # Initialize the database once
