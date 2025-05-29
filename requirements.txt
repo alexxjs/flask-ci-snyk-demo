@@ -1,0 +1,67 @@
+Flask==2.2.5
+Flask-Bcrypt==1.0.1
+Flask-JWT-Extended==4.4.0
+Flask-SQLAlchemy==3.0.0
+Flask-Migrate==4.0.5
+Flask-Login==0.6.2
+Werkzeug==2.2.3
+bcrypt==4.0.1
+itsdangerous==2.2.0
+blinker==1.9.0
+click==8.1.8
+Jinja2==3.1.5
+PyJWT==2.10.1
+SQLAlchemy==1.4.49  # Downgraded for Flask-SQLAlchemy compatibility
+greenlet==3.1.1
+cryptography==41.0.3
+pyotp==2.8.0
+pillow==10.0.1
+qrcode==7.4.2
+stripe==4.1.0  # Latest stable version
+pytest==7.4.3
+pysqlcipher3==1.2.0
+
+
+@app.route('/login2', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        # Limit login attempts
+        if username in login_attempts:
+            attempts, last_attempt_time = login_attempts[username]
+            if attempts >= 3 and datetime.now() - last_attempt_time < timedelta(minutes=15):
+                flash('Too many login attempts. Please try again after 15 minutes.', 'danger')
+                return redirect(url_for('login'))
+            elif datetime.now() - last_attempt_time >= timedelta(minutes=15):
+                # Reset login attempts after 15 minutes
+                login_attempts[username] = (0, datetime.now())
+
+        # parameterised query to retrieve user
+        query = text("SELECT * FROM user WHERE username = :username")
+        result = db.session.execute(query, {"username": username}).fetchone()
+
+        if result:
+            # Create a user object from the result
+            user = User.query.filter_by(username=username).first()
+            if user and user.check_password(password):
+                session['user_id'] = user.id
+                if user.two_factor_enabled:
+                    return redirect(url_for('verify_2fa'))
+                login_user(user)
+                # Reset login attempts on successful login
+                login_attempts.pop(username, None)
+                flash('Login successful!', 'success')
+                return redirect(url_for('dashboard'))
+
+        # Increment login attempts on failure
+        if username not in login_attempts:
+            login_attempts[username] = (1, datetime.now())
+        else:
+            attempts, _ = login_attempts[username]
+            login_attempts[username] = (attempts + 1, datetime.now())
+
+        flash('Invalid username or password', 'danger')
+
+    return render_template('login.html')

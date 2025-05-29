@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enable 2FA</title>
+</head>
+<body>
+    <h1>Enable Two-Factor Authentication</h1>
+    <p>Scan the QR code below in your authenticator app:</p>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ qr_code_url }}" alt="QR Code">
+    <form method="POST">
+        <button type="submit">Enable 2FA</button>
+    </form>
+</body>
+</html>

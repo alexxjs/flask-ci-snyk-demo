@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+
+<h3>Users</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>
+                <form method="POST" style="display:inline;">
+                    <input type="text" name="username" value="{{ user.username }}">
+            </td>
+            <td>
+                <input type="email" name="email" value="{{ user.decrypted_email }}">
+            </td>            
+            <td>{{ user.role }}</td>
+            <td>
+                    <input type="hidden" name="entity" value="user">
+                    <input type="hidden" name="id" value="{{ user.id }}">
+                    <button type="submit" name="action" value="edit" class="btn btn-primary btn-sm">Save</button>
+                    <button type="submit" name="action" value="delete" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Products</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.id }}</td>
+            <td>
+                <form method="POST" style="display:inline;">
+                    <input type="text" name="name" value="{{ product.name }}">
+            </td>
+            <td>
+                    <input type="number" step="0.01" name="price" value="{{ product.price }}">
+            </td>
+            <td>
+                    <input type="url" name="image" value="{{ product.image }}">
+            </td>
+            <td>
+                    <input type="hidden" name="entity" value="product">
+                    <input type="hidden" name="id" value="{{ product.id }}">
+                    <button type="submit" name="action" value="edit" class="btn btn-primary btn-sm">Save</button>
+                    <button type="submit" name="action" value="delete" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Order Management</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order Number</th>
+            <th>User</th>
+            <th>Total Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.order_number }}</td>
+            <td>{{ order.user.username }}</td>
+            <td>${{ "%.2f" | format(order.total_price) }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="order_id" value="{{ order.id }}">
+                    <select name="status" class="form-control d-inline-block" style="width: auto;">
+                        <option value="Waiting to be Shipped" {% if order.status == "Waiting to be Shipped" %}selected{% endif %}>Waiting to be Shipped</option>
+                        <option value="Shipped" {% if order.status == "Shipped" %}selected{% endif %}>Shipped</option>
+                        <option value="Delivered" {% if order.status == "Delivered" %}selected{% endif %}>Delivered</option>
+                        <option value="Cancelled" {% if order.status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
