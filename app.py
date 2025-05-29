@@ -17,12 +17,6 @@ import io
 import uuid
 from io import BytesIO
 
-
-
-
-
-
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///diskjock.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
