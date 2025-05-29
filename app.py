@@ -28,7 +28,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///diskjock.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'IhpqnkRLGOiDQI69L45uegn_M8ZAG9SrhNT27jpbHuY='
 
-stripe.api_key = app.config['STRIPE_SECRET_KEY']
+
 # Initialize the database once
 db.init_app(app)
 
