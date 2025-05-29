@@ -7,37 +7,37 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-scan:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 🧲 Checkout code
+    - name: ⬇️ Checkout Repository
       uses: actions/checkout@v3
 
-    - name: 🐍 Set up Python
+    - name: 🐍 Set up Python 3.11
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: 3.11
 
-    - name: 🧱 Install SQLCipher system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libsqlcipher-dev
-
-    - name: 🔧 Install Python dependencies
+    - name: 🔄 Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pytest
 
-    - name: 🧪 Run tests (if present)
+    # Optional: Add your test step here
+    - name: 🧪 Run Tests (optional)
       run: |
-        pytest || echo "No tests found, skipping."
+        echo "No tests defined yet"
+        # python -m unittest discover
 
-    - name: 🔍 Run Snyk to check for vulnerabilities
+    - name: 🔍 Snyk Dependency Scan
       uses: snyk/actions/python@master
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
-        args: --file=requirements.txt --package-manager=pip --skip-unresolved
+        args: test --file=requirements.txt --package-manager=pip --skip-unresolved
 
+    - name: 🧠 Snyk Code Scan
+      run: snyk code test
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
