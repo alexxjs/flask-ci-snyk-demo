@@ -278,7 +278,6 @@ def register():
 
     return render_template('register.html')
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -299,6 +298,7 @@ def login():
         flash('Invalid login (login)', 'danger')
 
     return render_template('login.html')
+
 
 
 
