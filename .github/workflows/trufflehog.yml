@@ -7,14 +7,15 @@ on:
     branches: [main]
 
 jobs:
-  trufflehog-scan:
+  trufflehog:
     runs-on: ubuntu-latest
-    name: Scan for Secrets with TruffleHog
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
 
-      - name: Run TruffleHog
-        uses: trufflesecurity/trufflehog@main
-        with:
-          scanArguments: "--only-verified"
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Run TruffleHog Secret Scan
+      uses: trufflesecurity/trufflehog@v3
+      with:
+        path: .
+        extra_args: --fail --only-verified
