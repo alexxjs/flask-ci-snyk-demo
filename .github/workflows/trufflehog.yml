@@ -11,11 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Run TruffleHog Secret Scan
-      uses: trufflesecurity/trufflehog@v3
-      with:
-        path: .
-        extra_args: --fail --only-verified
+      - name: Run TruffleHog (Docker)
+        run: |
+          docker run --rm -v "$(pwd)":/repo ghcr.io/trufflesecurity/trufflehog:latest \
+            filesystem /repo --only-verified --fail

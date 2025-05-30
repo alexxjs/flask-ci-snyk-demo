@@ -1,44 +1,36 @@
-name: CodeQL Analysis
+name: CodeQL
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
-  schedule:
-    - cron: '0 0 * * 0'  # weekly scan
-
-permissions:
-  security-events: write
-  actions: read
-  contents: read
+    branches: [main]
 
 jobs:
   analyze:
-    name: Analyze with CodeQL
+    name: CodeQL Analysis
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
 
     strategy:
-      fail-fast: false
       matrix:
-        language: [ 'python' ]
+        language: [python]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
+          queries: +security-and-quality
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:python"
-          queries: +security-and-quality
-
