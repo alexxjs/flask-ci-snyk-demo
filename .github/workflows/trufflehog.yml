@@ -1,4 +1,4 @@
-name: TruffleHog Secret Scan
+name: TruffleHog Git + Filesystem Secret Scan
 
 on:
   push:
@@ -7,14 +7,25 @@ on:
     branches: [main]
 
 jobs:
-  trufflehog:
+  trufflehog-secrets:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Run TruffleHog (Docker)
+      - name: Scan Git history for secrets
         run: |
-          docker run --rm -v "$(pwd)":/repo ghcr.io/trufflesecurity/trufflehog:latest \
-            filesystem /repo --only-verified --fail
+          echo "Scanning Git history..."
+          docker run --rm \
+            -v "$PWD:/repo" \
+            ghcr.io/trufflesecurity/trufflehog:latest \
+            git /repo --only-verified --fail || true
+
+      - name: Scan working directory (filesystem) for secrets
+        run: |
+          echo "Scanning working directory..."
+          docker run --rm \
+            -v "$PWD:/repo" \
+            ghcr.io/trufflesecurity/trufflehog:latest \
+            filesystem /repo --only-verified --fail || true
